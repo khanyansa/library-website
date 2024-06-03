@@ -62,13 +62,13 @@ header{
 .heading{
     text-align: center;
     padding-top: 130px;
-    color: #0871BB;
+    color: #fff;
     font-size: 1.8rem;
 
 }
 .latest-books h3{
     text-align: center;
-    color: #fff;
+    color: #1092D0;
     font-size: 1.5rem;
 
 }
@@ -210,13 +210,20 @@ header{
     font-size: 2rem;
 }
 
+.back-to-home{
+    color: #f0e8e8;
+    text-decoration: none;
+}
+.back-to-home i{
+    color: #0871BB;
+    padding-right: 10px;
+}
 .book-container{
     padding-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    /* flex-wrap: wrap; */
 }
 .book-container .book-image{
     flex: 1 1 90rem;
@@ -291,4 +298,111 @@ header{
     padding-bottom: 8px;
     border-bottom: 1px solid #fff;
     border-color: rgba(255, 255, 255, 0.1);
+}
+
+.about h1{
+    font-size: 1.6rem;
+}
+.about-container{
+    padding: 25px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+.about-container .about-library{
+    flex: 1 1 45rem;
+}
+.about-container .about-library p{
+    color: #f0e8e8;
+    word-spacing: 2px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+.about-container .features{
+    flex: 1 1 45rem;
+}
+.about-container .features h2{
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+.about-container .features i{
+    padding-right: 10px;
+    color: #0871BB;
+    font-size: 1.4rem;
+}
+.about-container .features ul{
+    margin-top: 8px;
+}
+.about-container .features ul li{
+    list-style: none;
+    color: #f0e8e8;
+    line-height: 1.5;
+    font-weight: 300;
+    font-size: 1rem;
+}
+.about-container .features ul li strong{
+    color: #1092D0;
+}
+
+footer{
+    background: #121212;
+    padding: 20px 30px;
+}
+
+.footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer p{
+    color: #f0e8e8;
+    font-size: 0,9rem;
+    font-weight: 300;
+}
+
+.footer p a{
+    text-decoration: none;
+    font-weight: 500;
+    color: #1092D0;
+}
+
+.socials a{
+    color: #0871BB;
+    padding-left: 10px;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.socials a:hover{
+    color: #1092D0;
+}
+
+.to-top{
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background: #0871BB;
+    bottom: 40px;
+    right: 40px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50px;
+    color: #f0e8e8;
+}
+
+/* search page */
+.search-section{
+    background-color: #15202b;
+    padding-bottom: 40px;
+}
+
+.search-section h1{
+    padding-top: 130px;
+    text-align: center;
+    color: #f0e8e8;
+    font-size: 2rem;
 }
