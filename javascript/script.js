@@ -1,5 +1,15 @@
 const global ={
-    currentPage: window.location.pathname
+    currentPage: window.location.pathname,
+    search: {
+        term: "",
+        page: 1,
+        totalPages: 1,
+        totalResults: 0,
+        resultsPerPage: 30
+    },
+    api: {
+        apiUrl: "https://openlibrary.org"
+    }
 }
 
 async function displayPopularBooks(){
@@ -13,7 +23,7 @@ async function displayPopularBooks(){
         div.innerHTML = ` 
                 
                 ${
-                    book.cover_id ? `<img src="https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg" alt="book">` : `<img src="./images/Book.webp" alt="${book.title}">`
+                    book.cover_id ? `<img src="https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg" alt="book">` : `<img src="./images/Book.webp" alt="${book.title}">`
                 }
                 <h2>${book.title}</h2>
                 <p>By ${author}</p>
@@ -65,7 +75,7 @@ async function displayBookDetails(){
 
 
     const numberOfPages = firstEdition.number_of_pages || "N/A";
-    const publishers = firstEdition.publishers ? firstEdition.publishers.join(", ") : "N/A";
+    const publishers = firstEdition.publishers ? firstEdition.publishers.slice(0, 2).join(", ") : "N/A";
     const edition = firstEdition.edition_name || "N/A";
     
 
@@ -85,7 +95,7 @@ async function displayBookDetails(){
                 <p class="description"> <span>Description:</span> ${description}
                     
                 </p>
-                <h5>Genres:</h5>
+                <h5>Subjects:</h5>
                 <ul class="list-group">
                     ${genres}
                 </ul>
@@ -139,6 +149,111 @@ async function fetchAvailabilityData(editionKey) {
         ? data[`OLID:${editionKey}`].availability 
         : { status: "N/A" };
 }
+// Search Books
+async function search(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    global.search.term = urlParams.get("search-term");
+   
+    
+    if(global.search.term !== "" && global.search.term !== null){
+       
+        const pageParam = parseInt(urlParams.get("page"));
+        global.search.page = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+        const { docs, num_found } = await searchApiData();
+
+        const total_pages = Math.ceil(num_found / global.search.resultsPerPage);
+
+        global.search.totalPages = total_pages;
+        global.search.totalResults = num_found;
+        
+        if(docs.length === 0){
+            showAlert("No results found");
+            return;
+        }
+
+        displaySearchResults(docs);
+        document.querySelector("#search-term").value = "";
+
+    }
+    else{
+        showAlert("Please enter a search term");
+    }
+   
+}
+
+
+    function displaySearchResults(docs){
+        // Clear Previous Results
+        document.querySelector("#search-wrapper").innerHTML = "";
+        document.querySelector("#results-heading").innerHTML = "";
+        document.querySelector("#pagination").innerHTML = "";
+
+
+          docs.forEach((book) => {
+        const div = document.createElement("div");
+        div.classList.add("book");
+
+        const authors = book.author_name && book.author_name.length > 0 
+            ? book.author_name.slice(0, 2).join(', ') 
+            : "Unknown";
+
+        div.innerHTML = ` 
+                
+                ${
+                    book.cover_i ? `<img src="https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg" alt="book">` : `<img src="./images/Book.webp" alt="${book.title}">`
+                }
+                <h2>${book.title}</h2>
+                <p>By ${authors}</p>
+                <a href="details.html?id=${book.key}">View Details</a>
+                `;
+        
+        document.querySelector("#results-heading").innerHTML = `<h2>${docs.length} of ${global.search.totalResults} results for ${global.search.term}</h2>`;        
+
+        document.querySelector("#search-wrapper").appendChild(div);
+
+    });
+
+    displayPagination();
+        
+    }
+
+// Create and display Pagination for search
+function displayPagination(){
+    const div = document.createElement("div");
+    div.classList.add("pagination");
+    div.innerHTML = `
+    <button class="btn btn-primary" id="prev">Prev</button>
+                <button class="btn btn-primary" id="next">Next</button>
+                <div class="page-counter">Page ${global.search.page} of ${global.search.totalPages}</div>         
+    `;
+
+    document.querySelector("#pagination").appendChild(div);
+
+    // Disable prev button if on first page
+    if(global.search.page === 1){
+        document.querySelector("#prev").disabled = true;
+    }
+    // Disable next button if on last page
+    if(global.search.page === global.search.totalPages){
+        document.querySelector("#next").disabled = true;
+    }
+
+    // Next Page
+    document.querySelector("#next").addEventListener("click", async () => {
+        global.search.page++;
+        const { docs, total_pages} = await searchApiData();
+        displaySearchResults(docs);
+    } )
+    // Previoust Page
+    document.querySelector("#prev").addEventListener("click", async () => {
+        global.search.page--;
+        const { docs, total_pages} = await searchApiData();
+        displaySearchResults(docs);
+    } )
+
+
+}
 
 //Display Latest books swiper slide function
 async function displaySlider(){
@@ -150,7 +265,7 @@ async function displaySlider(){
         div.classList.add("swiper-slide");
         div.innerHTML =`
         ${
-                    book.cover_id ? `<img src="https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg" alt="book">` : `<img src="./images/Book.webp" alt="${book.title}">`
+                    book.cover_id ? `<img src="https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg" alt="book">` : `<img src="./images/Book.webp" alt="${book.title}">`
                 }
         
                     <div class="content-container">
@@ -184,7 +299,7 @@ function initSwiper(){
                 slidesPerView: 2
                 
             },
-            800: {
+            900: {
                 slidesPerView: 3
                 
             }
@@ -196,10 +311,24 @@ function initSwiper(){
 
 // Fetch Data from API
 async function fetchApiData(endpoint){
-    const API_URL ="https://openlibrary.org";
+    const API_URL = global.api.apiUrl;
     
     showSpinner();
     const response = await fetch(`${API_URL}${endpoint}`);
+    const data = await response.json();
+
+    hideSpinner();
+    return data;
+}
+
+
+// Make Request to search
+async function searchApiData(){
+    const API_URL = global.api.apiUrl;
+    
+    showSpinner();
+    // const response = await fetch(`${API_URL}/search.json?q=${global.search.term}&page=${global.search.page}`);
+    const response = await fetch(`${API_URL}/search.json?q=${global.search.term}&page=${global.search.page}&limit=${global.search.resultsPerPage}`);
     const data = await response.json();
 
     hideSpinner();
@@ -211,6 +340,25 @@ function showSpinner(){
 }
 function hideSpinner(){
     document.querySelector(".spinner").classList.remove("show");
+}
+
+function showSpinner(){
+    document.querySelector(".spinner").classList.add("show");
+}
+function hideSpinner(){
+    document.querySelector(".spinner").classList.remove("show");
+}
+
+// Show Alert
+function showAlert(message, className = "error"){
+    const alertEl = document.createElement("div");
+    alertEl.classList.add("alert", className);
+    alertEl.appendChild(document.createTextNode(message));
+    document.querySelector("#alert").appendChild(alertEl);
+
+    setTimeout(() => {
+        alertEl.remove();
+    }, 3000);
 }
 
 // Init Website
@@ -225,7 +373,7 @@ function init (){
             displayBookDetails();
             break;
         case "/search.html": 
-            console.log("Search");
+            search();
             break;
     }
 }

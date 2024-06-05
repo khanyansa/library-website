@@ -5,6 +5,9 @@
     font-family: "Roboto", sans-serif;
 }
 
+html{
+    scroll-behavior: smooth;
+}
 section{
     padding: 0 60px;
 }
@@ -45,6 +48,11 @@ header{
     padding: 15px 30px;
     border: none;
     border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #1092D0;
 }
 
 .btn i{
@@ -420,15 +428,64 @@ footer{
     color: #f0e8e8;
     font-size: 2rem;
 }
+
+.results-heading{
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #f0e8e8;
+    margin-top: 10px;
+}
 .pagination{
     padding-top: 20px;
 }
 .pagination button{
     color: #f0e8e8;
 }
+
+
+.btn-primary:disabled {
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-primary:disabled:hover {
+    background: transparent;
+    color: #fff;
+}
+
+.pagination button:disabled,
+.pagination button[disabled] {
+    background-color: #ccc;
+    color: #fff;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination button:disabled:hover,
+.pagination button[disabled]:hover {
+    background-color: #ccc;
+    color: #fff;
+} 
 .page-counter{
     padding-top: 10px;
     color: #f0e8e8;
+}
+
+/* Alert */
+.alert {
+    
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: #f0e8e8;
+}
+
+.success {
+    background: green;
+}
+
+.error {
+    background: red;
 }
 
 
@@ -501,18 +558,13 @@ footer{
           
         }
     
-        .search-section a {
-            /* display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px; */
-        }
 
         .pagination {
             flex-direction: column;
             padding-top: 10px;
         }
-        
+
+                
         .pagination button {
             margin: 10px 0;
             width: 100%;

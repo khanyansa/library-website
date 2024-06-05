@@ -18,6 +18,7 @@
 <body>
     <header>
         <h1 class="logo">Bliss<span>Reads</span></h1>
+        <div id="alert"></div>
         <form action="/search.html">
             <div class="search">
                 <input type="text" name="search-term" id="search-term" placeholder="Search here..." />
@@ -30,40 +31,11 @@
 
     <section class="search-section">
         <h1>SEARCH RESULTS</h1>
-        <a href="index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i> back to homapage</a>
-        <div class="popular-wrapper">
-            <div class="book">
-                <img src="./images/Book.webp" alt="book">
-                <h2>Cross Fire</h2>
-                <p>By James Patterson</p>
-                <a href="details.html?id=1">View Details</a>
-            </div>
-            <div class="book">
-                <img src="./images/Book.webp" alt="book">
-                <h2>Cross Fire</h2>
-                <p>By James Patterson</p>
-                <a href="details.html?id=1">View Details</a>
-            </div>
-            <div class="book">
-                <img src="./images/Book.webp" alt="book">
-                <h2>Cross Fire</h2>
-                <p>By James Patterson</p>
-                <a href="details.html?id=1">View Details</a>
-            </div>
-            <div class="book">
-                <img src="./images/Book.webp" alt="book">
-                <h2>Cross Fire</h2>
-                <p>By James Patterson</p>
-                <a href="details.html?id=1">View Details</a>
-            </div>
-        </div>
+        <a href="index.html" class="back-to-home"><i class="fa-solid fa-arrow-left"></i> back to homepage</a>
+        <div class="results-heading" id="results-heading"></div>
+        <div class="popular-wrapper" id="search-wrapper"></div>
 
         <div id="pagination">
-            <div class="pagination">
-                <button class="btn btn-primary" id="prev">Prev</button>
-                <button class="btn btn-primary" id="next">Next</button>
-                <div class="page-counter">Page 1 of 5</div>
-            </div>
         </div>
     </section>
 
